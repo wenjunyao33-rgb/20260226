@@ -1,6 +1,7 @@
 # ---------------------------------------
 # Main Exclusions
 # ---------------------------------------
+.gitignore
 
 # Java Build Target
 target/**
