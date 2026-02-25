@@ -2,15 +2,18 @@ package events;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.*;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import demo.CommandDemo;
 import demo.Loaders_2024_Check;
 import structures.GameState;
+import structures.basic.Card;
 import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BasicObjectBuilders;
+import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
 
 /**
@@ -48,7 +51,7 @@ public class Initalize implements EventProcessor{
 
 		// 	// ---------------------------------------------------------------------------------------------------------------------
 
-// 	// [SC-03] Avatar Deployment: Place Human and AI units at mirrored board positions [cite: 355-360]
+// 	// [SC-03] Avatar Deployment: Place Human and AI units at mirrored board positions
 //         // Human avatar placed at [1,2], AI avatar placed at [7,2]
 // 		// Set starting visual health and attack for Human and Ai Avatar
 
@@ -86,7 +89,7 @@ public class Initalize implements EventProcessor{
 		
 // // ---------------------------------------------------------------------------------------------------------------------
 
-// // [SC-04] Resource Display: Initialize Health and Mana for both players [cite: 362-366]
+// // [SC-04] Resource Display: Initialize Health and Mana for both players
 //         // Mana follows the (turn + 1) logic; Turn 1 = 2 Mana
  
     //set human_avatar health
@@ -112,6 +115,30 @@ public class Initalize implements EventProcessor{
             try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
            
 // // ---------------------------------------------------------------------------------------------------------------------
+// // [SC-05] Starting Hand: Draw 3 cards for each player using OrderedCardLoader
+//         // Populates the hand positions 1-3 in the UI            
+//      // Load human cards (backend plus ui)
+ 
+            int handPosition = 1;
+            for (Card card : OrderedCardLoader.getPlayer1Cards(1)) {
+                gameState.human_cards.add(card);
+                BasicCommands.drawCard(out, card, handPosition, 0);
+                try {Thread.sleep(5);} catch (InterruptedException e) {e.printStackTrace();}
+               
+                handPosition++;
+               
+                if (handPosition>3) break;
+            }
+           
+//         // Load ai cards (only backend)
+            gameState.ai_deck = OrderedCardLoader.getPlayer2Cards(1);
+            for (int i = 0; i < 3; i++) {
+ 
+                if (!gameState.ai_deck.isEmpty()) {
+                    Card drawn = gameState.ai_deck.remove(0);
+                    gameState.ai_hand.add(drawn);
+                }
+            }
 	}
 
 }

@@ -1,12 +1,17 @@
 package structures;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
+ 
+import akka.actor.ActorRef;
+import commands.BasicCommands;
+import structures.basic.Unit;
+import structures.basic.UnitAnimationType;
+import utils.BasicObjectBuilders;
+import utils.StaticConfFiles;
 import structures.basic.BetterUnit;
+import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Player;
 import structures.basic.Tile;
-import structures.basic.Unit;
 
 /**
  * This class can be used to hold information about the on-going game.
@@ -49,5 +54,11 @@ public class GameState {
 	//  // [SC-04] Player Resource Tracking
     public Player human_player = new Player();
     public Player ai_player = new Player();
+
+	//  [SC-05] Card,Hand and deck Management
+    public List<Card> human_cards = new ArrayList<>();
+    public List<Card> ai_hand = new ArrayList<>();
+    // preloaded ai deck
+    public List<Card> ai_deck = new ArrayList<>();
 	
 }
