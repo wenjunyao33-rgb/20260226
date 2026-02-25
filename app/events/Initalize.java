@@ -7,6 +7,7 @@ import commands.BasicCommands;
 import demo.CommandDemo;
 import demo.Loaders_2024_Check;
 import structures.GameState;
+import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BasicObjectBuilders;
@@ -83,6 +84,33 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		
+// // ---------------------------------------------------------------------------------------------------------------------
+
+// // [SC-04] Resource Display: Initialize Health and Mana for both players [cite: 362-366]
+//         // Mana follows the (turn + 1) logic; Turn 1 = 2 Mana
+ 
+    //set human_avatar health
+        Player humanPlayer = new Player(20, 0);
+        gameState.human_player = humanPlayer;
+        BasicCommands.setPlayer1Health(out, humanPlayer);
+        try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+       
+    // set human_avatar mana
+            humanPlayer.setMana(gameState.turn+1);
+            BasicCommands.setPlayer1Mana(out, humanPlayer);
+            try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+           
+    // set ai avatar health
+        Player aiPlayer = new Player(20, 0);
+        gameState.ai_player = aiPlayer;
+        BasicCommands.setPlayer2Health(out, aiPlayer);
+        try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+       
+    // The AI's mana will be refreshed to (Turn + 1) only when its turn starts (same goes for human).
+            aiPlayer.setMana(0);
+            BasicCommands.setPlayer2Mana(out, aiPlayer);
+            try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+           
 // // ---------------------------------------------------------------------------------------------------------------------
 	}
 

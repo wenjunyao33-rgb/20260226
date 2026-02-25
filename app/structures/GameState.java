@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import structures.basic.BetterUnit;
+import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 
@@ -44,5 +45,9 @@ public class GameState {
 	    // Sync position
 	    unit.setPositionByTile(tile);
 	}
+
+	//  // [SC-04] Player Resource Tracking
+    public Player human_player = new Player();
+    public Player ai_player = new Player();
 	
 }
