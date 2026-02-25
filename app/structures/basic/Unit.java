@@ -26,7 +26,38 @@ public class Unit {
 	UnitAnimationSet animations;
 	ImageCorrection correction;
 	
-	public Unit() {}
+//	SC -01 Initial attributes
+	private int health;
+	private int attack;
+	private Tile unit_tile;
+	public boolean hasMoved = false;
+	public boolean hasAttacked = false;
+	
+//	SC -01 Initial functions
+	private void setDefaults() {
+	    this.health = 20;
+	    this.attack = 2;
+	}
+	public void sethealth(int amount) {
+		this.health=amount;
+	}
+	public void setAttack(int amount) {
+		this.attack=amount;
+	}
+	public int getHealth() {
+		return this.health;
+	}
+	public int getAttack() {
+		return this.attack;
+	}
+	public void setUnitTile(Tile tile) {
+		this.unit_tile = tile;
+	}
+	public Tile getUnitTile() {
+		return this.unit_tile;
+	}
+	
+	public Unit() {setDefaults();}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
 		super();
@@ -36,6 +67,7 @@ public class Unit {
 		position = new Position(0,0,0,0);
 		this.correction = correction;
 		this.animations = animations;
+		setDefaults();
 	}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction, Tile currentTile) {
@@ -46,6 +78,7 @@ public class Unit {
 		position = new Position(currentTile.getXpos(),currentTile.getYpos(),currentTile.getTilex(),currentTile.getTiley());
 		this.correction = correction;
 		this.animations = animations;
+		setDefaults();
 	}
 	
 	
@@ -58,6 +91,7 @@ public class Unit {
 		this.position = position;
 		this.animations = animations;
 		this.correction = correction;
+		setDefaults();
 	}
 
 	public int getId() {

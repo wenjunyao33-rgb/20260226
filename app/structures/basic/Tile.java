@@ -28,6 +28,32 @@ public class Tile {
 	int tilex;
 	int tiley;
 	
+//	SC -01 Initial attributes
+	Unit tile_unit = null;
+	public int highlighted;
+	
+// SC -01 Initial methods	
+// assign unit to this tile
+	public void setTileUnit(Unit unit) {
+		this.tile_unit=unit;
+	}
+	
+	@JsonIgnore
+	public Unit getTileUnit() {
+		return this.tile_unit;
+	}
+	
+//	set tile as highlighted
+	public void setHighlighted(int mode) {
+		this.highlighted = mode;
+	}
+	
+//	Get highlighted mode of tile
+	public int getHighlighted() {
+		return this.highlighted;
+	}
+// my methods
+	
 	public Tile() {}
 	
 	public Tile(String tileTexture, int xpos, int ypos, int width, int height, int tilex, int tiley) {
@@ -40,6 +66,7 @@ public class Tile {
 		this.height = height;
 		this.tilex = tilex;
 		this.tiley = tiley;
+		this.highlighted = 0;
 	}
 	
 	public Tile(List<String> tileTextures, int xpos, int ypos, int width, int height, int tilex, int tiley) {
@@ -51,6 +78,7 @@ public class Tile {
 		this.height = height;
 		this.tilex = tilex;
 		this.tiley = tiley;
+		this.highlighted = 0;
 	}
 	public List<String> getTileTextures() {
 		return tileTextures;
