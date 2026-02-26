@@ -30,4 +30,6 @@ jobs:
             ${{ runner.os }}-sbt-
 
       - name: Run tests
-        run: ./sbt test
+        run: |
+          chmod +x ./sbt-dist/bin/sbt
+          bash ./sbt test
