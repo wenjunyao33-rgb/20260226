@@ -54,9 +54,8 @@ public class CardClicked implements EventProcessor{
 		// SC-05: Show valid target tiles
 		if (card.isCreature()) {
 			List<Tile> summonTiles;
-			// SC-17: Airdrop — can be placed anywhere
-			if (GameState.hasKeyword(null, "Airdrop") == false &&
-				card.getCardname() != null && card.getCardname().equals("Ironcliff Guardian")) {
+			// SC-17: Airdrop (Ironcliff Guardian) — can be placed on any empty tile
+			if (card.getCardname() != null && card.getCardname().equals("Ironcliff Guardian")) {
 				summonTiles = new java.util.ArrayList<>();
 				for (int x = 0; x < 9; x++)
 					for (int y = 0; y < 5; y++)

@@ -45,7 +45,7 @@ public class GameState {
 	// ---- Keyword helpers ----
 
 	public static boolean hasKeyword(Unit unit, String keyword) {
-		if (unit.getCardName() == null) return false;
+		if (unit == null || unit.getCardName() == null) return false;
 		switch (keyword) {
 			case "Provoke":
 				return unit.getCardName().equals("Rock Pulveriser")
