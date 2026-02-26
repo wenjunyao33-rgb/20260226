@@ -1,14 +1,18 @@
 package events;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.GameState;
+import structures.basic.Card;
 import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BasicObjectBuilders;
+import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
 
 /**
@@ -55,6 +59,13 @@ public class Initalize implements EventProcessor{
 		gameState.player1 = new Player(20, gameState.turnNumber + 1);
 		BasicCommands.setPlayer1Health(out, gameState.player1);
 		BasicCommands.setPlayer1Mana(out, gameState.player1);
+
+		// SC-05: track human avatar as a friendly unit; deal starting hand of 3 cards
+		gameState.friendlyUnits.add(gameState.humanAvatar);
+		List<Card> deck = OrderedCardLoader.getPlayer1Cards(1);
+		for (int i = 0; i < 3 && i < deck.size(); i++) {
+			gameState.drawCardToHand(out, deck.get(i));
+		}
 	}
 
 }
