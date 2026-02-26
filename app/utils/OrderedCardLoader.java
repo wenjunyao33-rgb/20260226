@@ -30,6 +30,7 @@ public class OrderedCardLoader {
 				if (filename.startsWith("1_")) {
 					// this is a deck 1 card
 					cardsInDeck.add(BasicObjectBuilders.loadCard(cardsDIR+filename, cardID, Card.class));
+					cardID++;
 				}
 			}
 		}
@@ -53,6 +54,7 @@ public class OrderedCardLoader {
 				if (filename.startsWith("2_")) {
 					// this is a deck 2 card
 					cardsInDeck.add(BasicObjectBuilders.loadCard(cardsDIR+filename, cardID, Card.class));
+					cardID++;
 				}
 			}
 		}
