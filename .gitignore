@@ -68,3 +68,4 @@ local.properties
 .scala_dependencies
 .worksheet
 /bin/logs/application.log
+logs/
