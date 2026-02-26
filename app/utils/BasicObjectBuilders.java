@@ -206,6 +206,10 @@ public class BasicObjectBuilders {
 	 * @return
 	 */
 	public static Tile loadTile(int x, int y) {
+		// SC-24: reject out-of-bounds tile coordinates
+		if (x < 0 || x > 8 || y < 0 || y > 4) {
+			return null;
+		}
 		int gridmargin = 5;
 		int gridTopLeftx = 410;
 		int gridTopLefty = 280;
