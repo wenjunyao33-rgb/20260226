@@ -25,7 +25,17 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
-	
+
+	@JsonIgnore int attack;
+	@JsonIgnore int health;
+	@JsonIgnore int maxHealth;
+	@JsonIgnore int owner;
+	@JsonIgnore boolean hasMoved;
+	@JsonIgnore boolean hasAttacked;
+	@JsonIgnore boolean isAvatar;
+	@JsonIgnore boolean isStunned;
+	@JsonIgnore String cardName;
+
 	public Unit() {}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
@@ -106,6 +116,23 @@ public class Unit {
 	public void setPositionByTile(Tile tile) {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
-	
-	
+
+	@JsonIgnore public int getAttack() { return attack; }
+	public void setAttack(int attack) { this.attack = attack; }
+	@JsonIgnore public int getHealth() { return health; }
+	public void setHealth(int health) { this.health = health; }
+	@JsonIgnore public int getMaxHealth() { return maxHealth; }
+	public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
+	@JsonIgnore public int getOwner() { return owner; }
+	public void setOwner(int owner) { this.owner = owner; }
+	@JsonIgnore public boolean isHasMoved() { return hasMoved; }
+	public void setHasMoved(boolean hasMoved) { this.hasMoved = hasMoved; }
+	@JsonIgnore public boolean isHasAttacked() { return hasAttacked; }
+	public void setHasAttacked(boolean hasAttacked) { this.hasAttacked = hasAttacked; }
+	@JsonIgnore public boolean getIsAvatar() { return isAvatar; }
+	public void setIsAvatar(boolean isAvatar) { this.isAvatar = isAvatar; }
+	@JsonIgnore public boolean getIsStunned() { return isStunned; }
+	public void setIsStunned(boolean isStunned) { this.isStunned = isStunned; }
+	@JsonIgnore public String getCardName() { return cardName; }
+	public void setCardName(String cardName) { this.cardName = cardName; }
 }

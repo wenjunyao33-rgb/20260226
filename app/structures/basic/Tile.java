@@ -27,7 +27,13 @@ public class Tile {
 	int height;
 	int tilex;
 	int tiley;
-	
+
+	@JsonIgnore
+	private Unit unitOnTile;
+
+	public Unit getUnitOnTile() { return unitOnTile; }
+	public void setUnitOnTile(Unit u) { this.unitOnTile = u; }
+
 	public Tile() {}
 	
 	public Tile(String tileTexture, int xpos, int ypos, int width, int height, int tilex, int tiley) {
