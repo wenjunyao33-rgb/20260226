@@ -25,39 +25,18 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
-	
-//	SC -01 Initial attributes
-	private int health;
-	private int attack;
-	private Tile unit_tile;
-	public boolean hasMoved = false;
-	public boolean hasAttacked = false;
-	
-//	SC -01 Initial functions
-	private void setDefaults() {
-	    this.health = 20;
-	    this.attack = 2;
-	}
-	public void sethealth(int amount) {
-		this.health=amount;
-	}
-	public void setAttack(int amount) {
-		this.attack=amount;
-	}
-	public int getHealth() {
-		return this.health;
-	}
-	public int getAttack() {
-		return this.attack;
-	}
-	public void setUnitTile(Tile tile) {
-		this.unit_tile = tile;
-	}
-	public Tile getUnitTile() {
-		return this.unit_tile;
-	}
-	
-	public Unit() {setDefaults();}
+
+	@JsonIgnore int attack;
+	@JsonIgnore int health;
+	@JsonIgnore int maxHealth;
+	@JsonIgnore int owner;
+	@JsonIgnore boolean hasMoved;
+	@JsonIgnore boolean hasAttacked;
+	@JsonIgnore boolean isAvatar;
+	@JsonIgnore boolean isStunned;
+	@JsonIgnore String cardName;
+
+	public Unit() {}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
 		super();
@@ -67,7 +46,6 @@ public class Unit {
 		position = new Position(0,0,0,0);
 		this.correction = correction;
 		this.animations = animations;
-		setDefaults();
 	}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction, Tile currentTile) {
@@ -78,7 +56,6 @@ public class Unit {
 		position = new Position(currentTile.getXpos(),currentTile.getYpos(),currentTile.getTilex(),currentTile.getTiley());
 		this.correction = correction;
 		this.animations = animations;
-		setDefaults();
 	}
 	
 	
@@ -91,7 +68,6 @@ public class Unit {
 		this.position = position;
 		this.animations = animations;
 		this.correction = correction;
-		setDefaults();
 	}
 
 	public int getId() {
@@ -140,6 +116,23 @@ public class Unit {
 	public void setPositionByTile(Tile tile) {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
-	
-	
+
+	@JsonIgnore public int getAttack() { return attack; }
+	public void setAttack(int attack) { this.attack = attack; }
+	@JsonIgnore public int getHealth() { return health; }
+	public void setHealth(int health) { this.health = health; }
+	@JsonIgnore public int getMaxHealth() { return maxHealth; }
+	public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
+	@JsonIgnore public int getOwner() { return owner; }
+	public void setOwner(int owner) { this.owner = owner; }
+	@JsonIgnore public boolean isHasMoved() { return hasMoved; }
+	public void setHasMoved(boolean hasMoved) { this.hasMoved = hasMoved; }
+	@JsonIgnore public boolean isHasAttacked() { return hasAttacked; }
+	public void setHasAttacked(boolean hasAttacked) { this.hasAttacked = hasAttacked; }
+	@JsonIgnore public boolean getIsAvatar() { return isAvatar; }
+	public void setIsAvatar(boolean isAvatar) { this.isAvatar = isAvatar; }
+	@JsonIgnore public boolean getIsStunned() { return isStunned; }
+	public void setIsStunned(boolean isStunned) { this.isStunned = isStunned; }
+	@JsonIgnore public String getCardName() { return cardName; }
+	public void setCardName(String cardName) { this.cardName = cardName; }
 }

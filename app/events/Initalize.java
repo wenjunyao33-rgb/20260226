@@ -1,17 +1,14 @@
 package events;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.*;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
-import demo.CommandDemo;
-import demo.Loaders_2024_Check;
 import structures.GameState;
-import structures.basic.Card;
-import structures.basic.Player;
-import structures.basic.Tile;
-import structures.basic.Unit;
+import structures.basic.*;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
@@ -19,11 +16,11 @@ import utils.StaticConfFiles;
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
  * that it is ready to recieve commands from the back-end.
- * 
- * { 
- *   messageType = “initalize”
+ *
+ * {
+ *   messageType = "initalize"
  * }
- * 
+ *
  * @author Dr. Richard McCreadie
  *
  */
@@ -31,116 +28,83 @@ public class Initalize implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
-		// // [SC-01] Backend Initialization: Set game state to initialized and define starting turn
-		gameState.gameInitialised = true;
-		gameState.turn = 1;
-		
-		// [SC-01] Board Generation: Iterate through a 9x5 loop to populate the Tile array
-		
-		for(int i=0;i<9;i++)
-		{
-			for(int j=0;j<5;j++)
-			{
-				Tile tile = BasicObjectBuilders.loadTile(i, j);
-				gameState.tiles[i][j] = tile;
-				BasicCommands.drawTile(out, tile, 0);
-				try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+
+		if (gameState.gameInitalised) return;
+		gameState.gameInitalised = true;
+		gameState.something = true;
+
+		// SC-01: Draw the 9x5 board
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 5; y++) {
+				gameState.board[x][y] = BasicObjectBuilders.loadTile(x, y);
+				BasicCommands.drawTile(out, gameState.board[x][y], 0);
+				try { Thread.sleep(20); } catch (InterruptedException e) {}
 			}
 		}
 
-		// 	// ---------------------------------------------------------------------------------------------------------------------
+		// SC-01: Create players with 20 health
+		gameState.player1 = new Player(20, 0);
+		gameState.player2 = new Player(20, 0);
 
-// 	// [SC-03] Avatar Deployment: Place Human and AI units at mirrored board positions
-//         // Human avatar placed at [1,2], AI avatar placed at [7,2]
-// 		// Set starting visual health and attack for Human and Ai Avatar
+		// SC-01: Place Human Avatar at (1,2)
+		gameState.player1Avatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Unit.class);
+		Tile p1Tile = gameState.board[1][2];
+		gameState.player1Avatar.setPositionByTile(p1Tile);
+		gameState.player1Avatar.setOwner(1);
+		gameState.player1Avatar.setAttack(2);
+		gameState.player1Avatar.setHealth(20);
+		gameState.player1Avatar.setMaxHealth(20);
+		gameState.player1Avatar.setIsAvatar(true);
+		gameState.player1Avatar.setCardName("Human Avatar");
+		p1Tile.setUnitOnTile(gameState.player1Avatar);
+		gameState.allUnits.add(gameState.player1Avatar);
+		BasicCommands.drawUnit(out, gameState.player1Avatar, p1Tile);
+		try { Thread.sleep(100); } catch (InterruptedException e) {}
+		BasicCommands.setUnitAttack(out, gameState.player1Avatar, 2);
+		BasicCommands.setUnitHealth(out, gameState.player1Avatar, 20);
+		try { Thread.sleep(100); } catch (InterruptedException e) {}
 
-// 		// lOAD HUMAN UNIT
-		Unit human = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, gameState.UnitId++, Unit.class);
-		gameState.human_unit = human;
-		gameState.placeUnit(gameState.human_unit, gameState.tiles[1][2]); 
-		BasicCommands.drawUnit(out, gameState.human_unit, gameState.tiles[1][2]);
-		try {Thread.sleep(5);} catch (InterruptedException e) {e.printStackTrace();}
+		// SC-01: Place AI Avatar at (7,2)
+		gameState.player2Avatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, Unit.class);
+		Tile p2Tile = gameState.board[7][2];
+		gameState.player2Avatar.setPositionByTile(p2Tile);
+		gameState.player2Avatar.setOwner(2);
+		gameState.player2Avatar.setAttack(2);
+		gameState.player2Avatar.setHealth(20);
+		gameState.player2Avatar.setMaxHealth(20);
+		gameState.player2Avatar.setIsAvatar(true);
+		gameState.player2Avatar.setCardName("AI Avatar");
+		p2Tile.setUnitOnTile(gameState.player2Avatar);
+		gameState.allUnits.add(gameState.player2Avatar);
+		BasicCommands.drawUnit(out, gameState.player2Avatar, p2Tile);
+		try { Thread.sleep(100); } catch (InterruptedException e) {}
+		BasicCommands.setUnitAttack(out, gameState.player2Avatar, 2);
+		BasicCommands.setUnitHealth(out, gameState.player2Avatar, 20);
+		try { Thread.sleep(100); } catch (InterruptedException e) {}
 
-// 		//	Show human's health
-		BasicCommands.setUnitHealth(out, gameState.human_unit, 20);
-		try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-		
-// 		//	Show human's attack
-		BasicCommands.setUnitAttack(out, gameState.human_unit, 2);
-		try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+		// SC-01: Set player health display
+		BasicCommands.setPlayer1Health(out, gameState.player1);
+		BasicCommands.setPlayer2Health(out, gameState.player2);
+		try { Thread.sleep(100); } catch (InterruptedException e) {}
 
-// 		//	Load ai unit
-		Unit ai = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, gameState.UnitId++, Unit.class);
-		gameState.ai_unit = ai;
-		gameState.placeUnit(gameState.ai_unit, gameState.tiles[7][2]); 
-		BasicCommands.drawUnit(out, gameState.ai_unit, gameState.tiles[7][2]);
-		try {Thread.sleep(5);} catch (InterruptedException e) {e.printStackTrace();}
-		
-		
-// 		//	Show ai's health
-		BasicCommands.setUnitHealth(out, gameState.ai_unit, 20);
-		try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-		
-// 		//	Show ai's attack
-		BasicCommands.setUnitAttack(out, gameState.ai_unit, 2);
-		try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-		
-		
-// // ---------------------------------------------------------------------------------------------------------------------
+		// SC-01: Create and shuffle decks
+		gameState.player1Deck = OrderedCardLoader.getPlayer1Cards(2);
+		Collections.shuffle(gameState.player1Deck);
+		gameState.player2Deck = OrderedCardLoader.getPlayer2Cards(2);
+		Collections.shuffle(gameState.player2Deck);
 
-// // [SC-04] Resource Display: Initialize Health and Mana for both players
-//         // Mana follows the (turn + 1) logic; Turn 1 = 2 Mana
- 
-    //set human_avatar health
-        Player humanPlayer = new Player(20, 0);
-        gameState.human_player = humanPlayer;
-        BasicCommands.setPlayer1Health(out, humanPlayer);
-        try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-       
-    // set human_avatar mana
-            humanPlayer.setMana(gameState.turn+1);
-            BasicCommands.setPlayer1Mana(out, humanPlayer);
-            try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-           
-    // set ai avatar health
-        Player aiPlayer = new Player(20, 0);
-        gameState.ai_player = aiPlayer;
-        BasicCommands.setPlayer2Health(out, aiPlayer);
-        try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-       
-    // The AI's mana will be refreshed to (Turn + 1) only when its turn starts (same goes for human).
-            aiPlayer.setMana(0);
-            BasicCommands.setPlayer2Mana(out, aiPlayer);
-            try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-           
-// // ---------------------------------------------------------------------------------------------------------------------
-// // [SC-05] Starting Hand: Draw 3 cards for each player using OrderedCardLoader
-//         // Populates the hand positions 1-3 in the UI            
-//      // Load human cards (backend plus ui)
- 
-            int handPosition = 1;
-            for (Card card : OrderedCardLoader.getPlayer1Cards(1)) {
-                gameState.human_cards.add(card);
-                BasicCommands.drawCard(out, card, handPosition, 0);
-                try {Thread.sleep(5);} catch (InterruptedException e) {e.printStackTrace();}
-               
-                handPosition++;
-               
-                if (handPosition>3) break;
-            }
-           
-//         // Load ai cards (only backend)
-            gameState.ai_deck = OrderedCardLoader.getPlayer2Cards(1);
-            for (int i = 0; i < 3; i++) {
- 
-                if (!gameState.ai_deck.isEmpty()) {
-                    Card drawn = gameState.ai_deck.remove(0);
-                    gameState.ai_hand.add(drawn);
-                }
-            }
+		// SC-01: Draw initial hand of 3 cards each
+		for (int i = 0; i < 3; i++) {
+			gameState.drawCardFromDeck(out, 1);
+			gameState.drawCardFromDeck(out, 2);
+		}
+
+		// SC-04: Set initial mana (turn 1 = 2 mana)
+		gameState.player1.setMana(2);
+		BasicCommands.setPlayer1Mana(out, gameState.player1);
+		try { Thread.sleep(100); } catch (InterruptedException e) {}
+
+		BasicCommands.addPlayer1Notification(out, "Your Turn", 2);
 	}
 
 }
-
-

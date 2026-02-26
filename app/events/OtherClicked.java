@@ -8,11 +8,11 @@ import structures.GameState;
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case
  * somewhere that is not on a card tile or the end-turn button.
- * 
- * { 
- *   messageType = “otherClicked”
+ *
+ * {
+ *   messageType = "otherClicked"
  * }
- * 
+ *
  * @author Dr. Richard McCreadie
  *
  */
@@ -20,10 +20,9 @@ public class OtherClicked implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
-		
+		if (gameState.gameOver) return;
+		// Deselect any selected card or unit, clear highlights
+		gameState.clearSelection(out);
 	}
 
 }
-
-
