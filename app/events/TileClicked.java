@@ -12,7 +12,7 @@ import structures.GameState;
  * clicked. Tile indices start at 1.
  * 
  * { 
- *   messageType = “tileClicked”
+ *   messageType = "tileClicked"
  *   tilex = <x index of the tile>
  *   tiley = <y index of the tile>
  * }
@@ -22,16 +22,22 @@ import structures.GameState;
  */
 public class TileClicked implements EventProcessor{
 
-	@Override
-	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
+@Override
+public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 
-		int tilex = message.get("tilex").asInt();
-		int tiley = message.get("tiley").asInt();
-		
-		if (gameState.something == true) {
-			// do some logic
-		}
-		
-	}
+int tilex = message.get("tilex").asInt();
+int tiley = message.get("tiley").asInt();
+
+// SC-17: if awaiting a spell target, resolve the pending spell
+if (gameState.awaitingTarget) {
+CardResolver.resolve(out, gameState, tilex, tiley);
+return;
+}
+
+if (gameState.something == true) {
+// do some logic
+}
+
+}
 
 }
