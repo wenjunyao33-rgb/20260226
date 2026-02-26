@@ -25,6 +25,11 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
+	int health;
+	int damage;
+	boolean hasMoved;
+	boolean hasAttacked;
+	int owner;
 	
 	public Unit() {}
 	
@@ -97,6 +102,46 @@ public class Unit {
 		this.animations = animations;
 	}
 	
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
+	public boolean isHasMoved() {
+		return hasMoved;
+	}
+
+	public void setHasMoved(boolean hasMoved) {
+		this.hasMoved = hasMoved;
+	}
+
+	public boolean isHasAttacked() {
+		return hasAttacked;
+	}
+
+	public void setHasAttacked(boolean hasAttacked) {
+		this.hasAttacked = hasAttacked;
+	}
+
+	public int getOwner() {
+		return owner;
+	}
+
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
+
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
