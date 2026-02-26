@@ -29,12 +29,12 @@ public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 
 int handPosition = message.get("position").asInt();
 
-// SC-06: clear any previous highlights
-gameState.clearHighlights(out);
-
 int idx = handPosition - 1;
 if (idx < 0 || idx >= gameState.player_cards.size()) return;
 Card card = gameState.player_cards.get(idx);
+
+// SC-06: clear any previous highlights now that we have a valid card
+gameState.clearHighlights(out);
 
 // SC-09: reject if the player cannot afford the card
 if (card.getManacost() > gameState.player1.getMana()) {
