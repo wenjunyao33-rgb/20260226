@@ -1,5 +1,7 @@
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -53,5 +55,71 @@ public class InitalizationTest {
 		BasicCommands.drawTile(null, tile, 0); // draw tile, but will use altTell, so nothing should happen
 		
 	}
-	
+
+	/**
+	 * SC-01: Checks that the 9x5 tile board is populated after initialization.
+	 */
+	@Test
+	public void checkBoardInitialized() {
+		CheckMessageIsNotNullOnTell altTell = new CheckMessageIsNotNullOnTell();
+		BasicCommands.altTell = altTell;
+
+		GameState gameState = new GameState();
+		Initalize initalizeProcessor = new Initalize();
+		ObjectNode eventMessage = Json.newObject();
+		initalizeProcessor.processEvent(null, gameState, eventMessage);
+
+		assertNotNull(gameState.board);
+		assertEquals(9, gameState.board.length);
+		assertEquals(5, gameState.board[0].length);
+		for (int x = 1; x <= 9; x++) {
+			for (int y = 1; y <= 5; y++) {
+				assertNotNull("Tile [" + x + "," + y + "] should not be null", gameState.board[x-1][y-1]);
+			}
+		}
+	}
+
+	/**
+	 * SC-03: Checks that avatars are deployed at correct tiles after initialization.
+	 */
+	@Test
+	public void checkAvatarsDeployed() {
+		CheckMessageIsNotNullOnTell altTell = new CheckMessageIsNotNullOnTell();
+		BasicCommands.altTell = altTell;
+
+		GameState gameState = new GameState();
+		Initalize initalizeProcessor = new Initalize();
+		ObjectNode eventMessage = Json.newObject();
+		initalizeProcessor.processEvent(null, gameState, eventMessage);
+
+		// human avatar at tile [1,2]
+		assertNotNull(gameState.humanAvatar);
+		assertEquals(1, gameState.humanAvatar.getPosition().getTilex());
+		assertEquals(2, gameState.humanAvatar.getPosition().getTiley());
+
+		// AI avatar at tile [7,2]
+		assertNotNull(gameState.aiAvatar);
+		assertEquals(7, gameState.aiAvatar.getPosition().getTilex());
+		assertEquals(2, gameState.aiAvatar.getPosition().getTiley());
+	}
+
+	/**
+	 * SC-04: Checks player1 health and mana are set during initialization.
+	 * Initial mana = turnNumber(1) + 1 = 2.
+	 */
+	@Test
+	public void checkPlayerResourcesInitialized() {
+		CheckMessageIsNotNullOnTell altTell = new CheckMessageIsNotNullOnTell();
+		BasicCommands.altTell = altTell;
+
+		GameState gameState = new GameState();
+		Initalize initalizeProcessor = new Initalize();
+		ObjectNode eventMessage = Json.newObject();
+		initalizeProcessor.processEvent(null, gameState, eventMessage);
+
+		assertNotNull(gameState.player1);
+		assertEquals(20, gameState.player1.getHealth());
+		assertEquals(2, gameState.player1.getMana());
+	}
+
 }
